@@ -1,12 +1,11 @@
 module.exports = {
   main: {
     src: [
-      '<%= htmlPath %>/shared/**/*.html',
       '<%= htmlPath %>/main/**/*.html',
     ],
     dest: '<%= jsPath %>/main/templates_module.js',
     options: {
-      module: 'ch.Main.Templates',
+      module: 'nl.Templates',
       standalone: true,
       htmlmin: {
         collapseWhitespace: true,

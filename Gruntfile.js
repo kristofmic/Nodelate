@@ -30,10 +30,14 @@ function gruntConfig(grunt) {
   }
 
   grunt.registerTask('build:dev', [
-
+    'copy',
+    'ngtemplates',
+    'concat',
+    'sass'
   ]);
   grunt.registerTask('build:dist', [
     'build:dev',
+    'uglify'
 
   ]);
   grunt.registerTask('server', ['bgShell:server']);
