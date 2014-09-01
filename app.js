@@ -1,0 +1,32 @@
+var
+  express = require('express'),
+  path = require('path'),
+  favicon = require('static-favicon'),
+  logger = require('morgan'),
+  cookieParser = require('cookie-parser'),
+  bodyParser = require('body-parser'),
+
+  routes = require('./routes'),
+  errors = require('./errors'),
+
+  app = express();
+
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+app.use(favicon());
+
+app.use(logger('dev'));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
+
+app.use(cookieParser());
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+routes(app);
+errors(app);
+
+module.exports = app;
