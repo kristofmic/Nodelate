@@ -6,7 +6,8 @@ var
   pbkdf2 = Promise.promisify(crypto.pbkdf2);
 
 module.exports = {
-  create: create
+  create: create,
+  destroy: destroy
 };
 
 function create(req, res) {
@@ -31,7 +32,7 @@ function create(req, res) {
   }
 
   function verifyPassword(key, user) {
-    if (bufferEqual(key, user.password)) {
+    if (user && bufferEqual(key, user.password)) {
       return {
         user: user,
         key: key
@@ -58,19 +59,14 @@ function create(req, res) {
     var
       expirationDate = new Date(),
       user = userData.user,
-      deferredPromise = new Promise(defer);
+      userParams;
 
-    return deferredPromise;
+    userParams = {
+      token: userData.token,
+      tokenExpiration: expirationDate.setDate(expirationDate.getDate() + 10)
+    };
 
-    function defer(resolve, reject) {
-      user.token = userData.token;
-      user.tokenExpiration = expirationDate.setDate(expirationDate.getDate() + 10);
-
-      user.save(function(err, updatedUser) {
-        if (err) { reject(err); }
-        else { resolve(updatedUser); }
-      });
-    }
+    return User.updateUser(user, userParams);
   }
 
   function sendResponse(user) {
@@ -79,6 +75,36 @@ function create(req, res) {
       token: user.token,
       isActive: user.isActive
     });
+  }
+
+  function handleError(err) {
+    res.json(500, err || 'There was a problem. Please try again.');
+  }
+}
+
+function destroy(req, res) {
+  var
+    token = req.params.token;
+
+  User.findByToken(token)
+    .then(destroyToken)
+    .then(sendResponse)
+    .catch(handleError);
+
+  function destroyToken(user) {
+    var
+      userParams;
+
+    userParams = {
+      token: null,
+      tokenExpiration: null
+    };
+
+    return User.updateUser(user, userParams);
+  }
+
+  function sendResponse(user) {
+    res.json(200, 'Success');
   }
 
   function handleError(err) {

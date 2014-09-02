@@ -7,6 +7,7 @@ var
 router.post('/users', users.create);
 
 router.post('/sessions', sessions.create);
+router.delete('/sessions/:token', sessions.destroy);
 
 module.exports = router;
 

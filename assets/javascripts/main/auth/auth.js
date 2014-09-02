@@ -50,7 +50,8 @@
     }
 
     function logout() {
-      // TODO: Send server update to logout as well
+      $http.delete('/api/sessions/' + $cookieStore.get('nl.token'));
+
       $cookieStore.remove('nl.token');
       authenticated = false;
     }
