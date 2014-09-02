@@ -38,7 +38,7 @@ function create(req, res) {
       };
     }
     else {
-      Promise.reject('Username or password is invalid. Please try again.');
+      return Promise.reject('Username or password is invalid. Please try again.');
     }
   }
 

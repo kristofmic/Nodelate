@@ -36,7 +36,7 @@
       }
 
       function handleError(err) {
-        snackbar.error(err.data);
+        snackbar.error(angular.fromJson(err.data));
       }
     }
   }
