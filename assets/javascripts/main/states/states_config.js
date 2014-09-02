@@ -13,6 +13,7 @@
 
   function statesConfig($stateProvider, $urlRouterProvider) {
     $urlRouterProvider
+      .rule()
       .otherwise('/home');
 
     $stateProvider
@@ -71,6 +72,11 @@
         templateUrl: 'dashboard.html',
         controller: 'dashboardController'
       });
+
+    function authenticatedRedirect($injector, $location) {
+      var
+
+    }
   }
 
 })(angular);
