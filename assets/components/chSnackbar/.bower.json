@@ -1,0 +1,38 @@
+{
+  "name": "chSnackbar",
+  "description": "angular module for snackbar notifications",
+  "main": "chSnackbar.min.js",
+  "authors": [
+    "chris hourihan"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "assets/components",
+    "spec",
+    "grunt",
+    "assets",
+    ".bowerrc",
+    ".gitignore",
+    "demo.html",
+    "gruntfile.js",
+    "package.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "angular": "~1.2.23"
+  },
+  "homepage": "https://github.com/kristofmic/chSnackbar",
+  "_release": "55eeba11e0",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "55eeba11e0546079d61207e4076d34f39fccd182"
+  },
+  "_source": "git@github.com:kristofmic/chSnackbar.git",
+  "_target": "*",
+  "_originalSource": "git@github.com:kristofmic/chSnackbar.git",
+  "_direct": true
+}

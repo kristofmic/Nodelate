@@ -5,11 +5,11 @@
 
   dependencies = [
     'ui.router',
-    'ch.Snackbar',
     'ch.Validator',
-    'nl.User'
+    'ch.Snackbar',
+    'nl.Auth'
   ];
 
-  angular.module('nl.Signup', dependencies);
+  angular.module('nl.Session', dependencies);
 
 })(angular);

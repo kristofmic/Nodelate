@@ -4,7 +4,9 @@ module.exports = {
       '<%= componentsPath %>/angular/angular.js',
       '<%= componentsPath %>/angular-ui-router/release/angular-ui-router.js',
       '<%= componentsPath %>/angular-cookies/angular-cookies.js',
-      '<%= componentsPath %>/lodash/dist/lodash.js'
+      '<%= componentsPath %>/lodash/dist/lodash.js',
+      '<%= componentsPath %>/chSnackbar/dist/chSnackbar.js',
+      '<%= componentsPath %>/chValidator/dist/chValidator.js'
     ],
     dest: '<%= pubJsPath %>/components.js'
   },
@@ -18,8 +20,10 @@ module.exports = {
       '<%= jsPath %>/vendor/**/*.js',
       '<%= jsPath %>/main/auth/auth_module.js',
       '<%= jsPath %>/main/auth/*.js',
-      '<%= jsPath %>/main/login/login_module.js',
-      '<%= jsPath %>/main/login/*.js',
+      '<%= jsPath %>/main/user/user_module.js',
+      '<%= jsPath %>/main/user/*.js',
+      '<%= jsPath %>/main/session/session_module.js',
+      '<%= jsPath %>/main/session/*.js',
       '<%= jsPath %>/main/signup/signup_module.js',
       '<%= jsPath %>/main/signup/*.js',
       '<%= jsPath %>/main/dashboard/dashboard_module.js',

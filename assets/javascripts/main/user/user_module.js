@@ -4,9 +4,9 @@
     dependencies;
 
   dependencies = [
-
+    'nl.Auth'
   ];
 
-  angular.module('nl.Login', dependencies);
+  angular.module('nl.User', dependencies);
 
 })(angular);

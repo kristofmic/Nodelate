@@ -1,0 +1,38 @@
+{
+  "name": "chValidator",
+  "description": "angular module for snackbar notifications",
+  "main": "chValidator.min.js",
+  "authors": [
+    "chris hourihan"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "assets/components",
+    "spec",
+    "grunt",
+    "assets",
+    ".bowerrc",
+    ".gitignore",
+    "demo.html",
+    "gruntfile.js",
+    "package.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "angular": "~1.2.23"
+  },
+  "homepage": "https://github.com/kristofmic/chValidator",
+  "_release": "99579134b5",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "99579134b5b3f25c9b4877fd37826b54fe44a254"
+  },
+  "_source": "git@github.com:kristofmic/chValidator.git",
+  "_target": "*",
+  "_originalSource": "git@github.com:kristofmic/chValidator.git",
+  "_direct": true
+}

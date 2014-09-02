@@ -8,24 +8,23 @@
     '$state',
     'VALIDATION_EVENT',
     'snackbar',
-    'user',
-    signupController
+    'auth',
+    loginController
   ];
 
-  angular.module('nl.Signup')
-    .controller('signupController', definitions);
+  angular.module('nl.Session')
+    .controller('loginController', definitions);
 
-  function signupController($scope, $state, VALIDATION_EVENT, snackbar, user) {
+  function loginController($scope, $state, VALIDATION_EVENT, snackbar, auth) {
     $scope.submit = submit;
 
     function submit() {
       $scope.$broadcast(VALIDATION_EVENT.VALIDATE);
 
-      if ($scope.signupForm.$valid) {
-        user.create({
+      if ($scope.loginForm.$valid) {
+        auth.login({
           email: $scope.email,
-          password: $scope.password,
-          passwordConfirmation: $scope.passwordConfirmation
+          password: $scope.password
         })
         .then(nextState)
         ['catch'](handleError);

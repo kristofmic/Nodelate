@@ -55,7 +55,11 @@
             template: '<div ui-view></div>'
           }
         },
-        data: { auth: false }
+        data: { auth: true }
+      })
+      .state('main.private.logout', {
+        url: '/logout',
+        controller: 'logoutController'
       })
       .state('main.private.dashboard', {
         url: '/dashboard',

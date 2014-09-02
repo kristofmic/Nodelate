@@ -1,15 +1,13 @@
 var
   express = require('express'),
-  router = express.Router();
+  router = express.Router(),
+  users = require('./users'),
+  sessions = require('./sessions');
 
-//router.put('/*', putApiWrapper);
-//router.post('/*', postApiWrapper);
-router.get('/*', get);
-//router.delete('/*', deleteApiWrapper);
+router.post('/users', users.create);
+
+router.post('/sessions', sessions.create);
 
 module.exports = router;
 
-function get(req, res) {
-  res.json(200, 'Hello world');
-}
 

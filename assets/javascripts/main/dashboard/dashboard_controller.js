@@ -12,7 +12,6 @@
     .controller('dashboardController', definitions);
 
   function dashboardController($scope) {
-    console.log('Dashboard loaded!');
   }
 
 })(angular);
