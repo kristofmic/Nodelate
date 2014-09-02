@@ -13,7 +13,7 @@
 
   function statesConfig($stateProvider, $urlRouterProvider) {
     $urlRouterProvider
-      .otherwise('/login');
+      .otherwise('/home');
 
     $stateProvider
       .state('main', {
@@ -33,6 +33,11 @@
           }
         },
         data: { auth: false }
+      })
+      .state('main.public.home', {
+        url: '/home',
+        templateUrl: 'home.html',
+        controller: 'homeController'
       })
       .state('main.public.login', {
         url: '/login',

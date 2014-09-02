@@ -44,12 +44,13 @@
         .then(setToken);
 
       function setToken(res) {
-        setSession(res.data.apitoken);
+        setSession(res.data.token);
         return res;
       }
     }
 
     function logout() {
+      // TODO: Send server update to logout as well
       $cookieStore.remove('nl.token');
       authenticated = false;
     }

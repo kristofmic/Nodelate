@@ -7,6 +7,7 @@
     'nl.Templates',
     'nl.States',
     'nl.Auth',
+    'nl.Home',
     'nl.Session',
     'nl.Signup',
     'nl.Dashboard'

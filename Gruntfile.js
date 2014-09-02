@@ -1,7 +1,9 @@
 module.exports = gruntConfig;
 
 function gruntConfig(grunt) {
-  var pkg = grunt.file.readJSON('package.json');
+  var
+    pkg = grunt.file.readJSON('package.json'),
+    tasks = require('./tasks/grunt');
 
   grunt.initConfig({
     jsPath: 'assets/javascripts',
@@ -14,13 +16,13 @@ function gruntConfig(grunt) {
     pubImagePath: 'public/images',
     pubFontPath: 'public/fonts',
 
-    concat: require('./grunt/concat'),
-    watch: require('./grunt/watch'),
-    copy: require('./grunt/copy'),
-    sass: require('./grunt/sass'),
-    ngtemplates: require('./grunt/ngtemplates'),
-    uglify: require('./grunt/uglify'),
-    bgShell: require('./grunt/bgShell')
+    concat: tasks.concat,
+    watch: tasks.watch,
+    copy: tasks.copy,
+    sass: tasks.sass,
+    ngtemplates: tasks.ngtemplates,
+    uglify: tasks.uglify,
+    bgShell: tasks.bgShell
   });
 
   for (var task in pkg.devDependencies) {

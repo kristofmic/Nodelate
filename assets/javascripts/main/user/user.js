@@ -36,7 +36,7 @@
         .then(setUser);
 
       function setToken(res) {
-        auth.setSession(res.data.apitoken);
+        auth.setSession(res.data.token);
         return res;
       }
 

@@ -1,15 +1,20 @@
 var
+  config = require('./config'),
   express = require('express'),
   path = require('path'),
   favicon = require('static-favicon'),
   logger = require('morgan'),
   cookieParser = require('cookie-parser'),
   bodyParser = require('body-parser'),
+  mongoose = require('mongoose'),
 
   routes = require('./routes'),
   errors = require('./errors'),
 
   app = express();
+
+// db setup
+mongoose.connect(process.env.DB_CONNECTION);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
