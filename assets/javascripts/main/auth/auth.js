@@ -50,7 +50,7 @@
     }
 
     function logout() {
-      $http.delete('/api/sessions/' + $cookieStore.get('nl.token'));
+      $http.delete('/api/sessions/', { headers: { token: $cookieStore.get('nl.token') }});
 
       $cookieStore.remove('nl.token');
       authenticated = false;

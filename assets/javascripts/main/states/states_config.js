@@ -1,6 +1,7 @@
 (function(angular) {
   var
-    definition;
+    definition,
+    runDefinition;
 
   definition = [
     '$stateProvider',
@@ -8,12 +9,20 @@
     statesConfig
   ];
 
+  runDefinition = [
+    '$rootScope',
+    '$state',
+    'auth',
+    unAuthenticatedRedirect
+  ];
+
   angular.module('nl.States')
-    .config(definition);
+    .config(definition)
+    .run(runDefinition);
 
   function statesConfig($stateProvider, $urlRouterProvider) {
     $urlRouterProvider
-      .rule()
+      .rule(authenticatedRedirect)
       .otherwise('/home');
 
     $stateProvider
@@ -72,10 +81,32 @@
         templateUrl: 'dashboard.html',
         controller: 'dashboardController'
       });
+  }
 
-    function authenticatedRedirect($injector, $location) {
-      var
+  function unAuthenticatedRedirect($rootScope, $state, auth) {
+    $rootScope.$on('$stateChangeStart', authorizeState);
 
+    function authorizeState(e, toState) {
+      if (toState.data.auth && !auth.isAuthenticated()) {
+        e.preventDefault();
+
+      }
+    }
+  }
+
+  function authenticatedRedirect($injector, $location) {
+    var
+      path = $location.path(),
+      auth = $injector.get('auth'),
+      login = '/login',
+      signup = '/signup';
+
+    if (auth.isAuthenticated() && redirectPath()) {
+      $location.path('/home').replace();
+    }
+
+    function redirectPath() {
+      return path === login || path === signup;
     }
   }
 

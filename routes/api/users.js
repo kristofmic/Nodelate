@@ -12,12 +12,9 @@ module.exports = {
 function create(req, res) {
   var
     email = req.body.email,
-    password = req.body.password,
-    passwordConfirmation = req.body.passwordConfirmation;
+    password = req.body.password;
 
-  if (!email && !password && passwordConfirmation) { res.json(400, 'Missing email or password. Please try again.'); }
-
-  if (password !== passwordConfirmation) { res.json(400, 'Passwords do not match. Please try again.'); }
+  if (!email && !password) { res.json(400, 'Missing email or password. Please try again.'); }
 
   User.findByEmail(email)
     .then(verifyEmailUnique)

@@ -3,7 +3,8 @@
     dependencies;
 
   dependencies = [
-    'ui.router'
+    'ui.router',
+    'nl.Auth'
   ];
 
   angular.module('nl.States', dependencies);

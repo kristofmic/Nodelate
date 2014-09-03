@@ -9,7 +9,7 @@ var
 userSchema = {
   email: { type: String, index: true, unique: true },
   password: Buffer,
-  token: { type: String, index: true, unique: true, sparse: true },
+  token: { type: String, unique: true, sparse: true },
   tokenExpiration: Date,
   isActive: Boolean
 };
