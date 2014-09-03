@@ -7,7 +7,8 @@ var
 
 module.exports = {
   create: create,
-  destroy: destroy
+  destroy: destroy,
+  show: show
 };
 
 function create(req, res) {
@@ -105,6 +106,28 @@ function destroy(req, res) {
 
   function sendResponse(user) {
     res.json(200, 'Success');
+  }
+
+  function handleError(err) {
+    console.log(err);
+    res.json(500, err || 'There was a problem. Please try again.');
+  }
+}
+
+function show(req, res) {
+  var
+    token = req.header('token');
+
+  User.findByToken(token)
+    .then(sendResponse)
+    .catch(handleError);
+
+  function sendResponse(user) {
+    res.json(200, {
+      email: user.email,
+      token: user.token,
+      isActive: user.isActive
+    });
   }
 
   function handleError(err) {

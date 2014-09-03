@@ -4,6 +4,7 @@
     definitions;
 
   definitions = [
+    '$window',
     '$http',
     '$auth',
     '_',
@@ -13,18 +14,27 @@
   angular.module('nl.User')
     .factory('user', definitions);
 
-  function userFactory($http, $auth, _) {
+  function userFactory($window, $http, $auth, _) {
     var
       self = {},
       userStore = {};
 
+    init();
+
     self.create = create;
     self.login = login;
     self.logout = logout;
-    self.get = get;
-    self.set = set;
+    self.props = {
+      get: getProp,
+      set: setProp
+    };
 
     return self;
+
+    function init() {
+      $http.get('/api/sessions', { headers: { token: $window.localStorage.nl_token }})
+        .then(setUserFromResponse);
+    }
 
     function create(userParams) {
       return $auth.signup(userParams)
@@ -37,16 +47,16 @@
     }
 
     function logout() {
-      $http.delete('/api/sessions', { headers: { token: get('token') }});
-      clearUser();
+      $http.delete('/api/sessions', { headers: { token: getProp('token') }});
+      clear();
       $auth.logout();
     }
 
-    function get(prop) {
+    function getProp(prop) {
       return userStore[prop];
     }
 
-    function set(prop, val) {
+    function setProp(prop, val) {
       userStore[prop] = val;
     }
 
@@ -54,7 +64,7 @@
       _.extend(userStore, res.data);
     }
 
-    function clearUser() {
+    function clear() {
       userStore = {};
     }
   }
