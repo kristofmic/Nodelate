@@ -108,6 +108,7 @@ function destroy(req, res) {
   }
 
   function handleError(err) {
+    console.log(err);
     res.json(500, err || 'There was a problem. Please try again.');
   }
 }

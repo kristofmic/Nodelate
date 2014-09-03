@@ -19,22 +19,43 @@
       userStore = {};
 
     self.create = create;
+    self.login = login;
+    self.logout = logout;
     self.get = get;
+    self.set = set;
 
     return self;
 
     function create(userParams) {
       return $auth.signup(userParams)
-        .then(setUser);
+        .then(setUserFromResponse);
+    }
 
-      function setUser(res) {
-        _.extend(userStore, res.data);
-        return self;
-      }
+    function login(credentials) {
+      return $auth.login(credentials)
+        .then(setUserFromResponse);
+    }
+
+    function logout() {
+      $http.delete('/api/sessions', { headers: { token: get('token') }});
+      clearUser();
+      $auth.logout();
     }
 
     function get(prop) {
       return userStore[prop];
+    }
+
+    function set(prop, val) {
+      userStore[prop] = val;
+    }
+
+    function setUserFromResponse(res) {
+      _.extend(userStore, res.data);
+    }
+
+    function clearUser() {
+      userStore = {};
     }
   }
 

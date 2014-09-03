@@ -6,23 +6,23 @@
   definitions = [
     '$scope',
     '$state',
-    '$auth',
-    'VALIDATION_EVENT',
+    'user',
     'snackbar',
+    'VALIDATION_EVENT',
     loginController
   ];
 
   angular.module('nl.Session')
     .controller('loginController', definitions);
 
-  function loginController($scope, $state, $auth, VALIDATION_EVENT, snackbar) {
+  function loginController($scope, $state, user, snackbar, VALIDATION_EVENT) {
     $scope.submit = submit;
 
     function submit() {
       $scope.$broadcast(VALIDATION_EVENT.VALIDATE);
 
       if ($scope.loginForm.$valid) {
-        $auth.login({
+        user.login({
           email: $scope.email,
           password: $scope.password
         })

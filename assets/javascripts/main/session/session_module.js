@@ -5,7 +5,6 @@
 
   dependencies = [
     'ui.router',
-    'satellizer',
     'ch.Validator',
     'ch.Snackbar',
     'nl.User'

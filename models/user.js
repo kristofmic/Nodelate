@@ -27,6 +27,9 @@ function findByEmail(email) {
   if (email) {
     return new Promise(defer);
   }
+  else {
+    return Promise.reject('No email provided.');
+  }
 
   function defer(resolve, reject) {
     User.findOne().where({ email: email }).exec(function(err, user) {
@@ -39,6 +42,9 @@ function findByEmail(email) {
 function findByToken(token) {
   if (token) {
     return new Promise(defer);
+  }
+  else {
+    return Promise.reject('No token provided.');
   }
 
   function defer(resolve, reject) {
