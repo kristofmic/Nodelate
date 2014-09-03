@@ -8,7 +8,8 @@ var
 module.exports = {
   create: create,
   destroy: destroy,
-  show: show
+  show: show,
+  validate: validate
 };
 
 function create(req, res) {
@@ -20,17 +21,13 @@ function create(req, res) {
 
   Promise.join(
       pbkdf2(password, process.env.SALT, 3, 20),
-      findUser(),
+      User.findByEmail(email),
       verifyPassword
     )
     .then(createToken)
     .then(updateUser)
     .then(sendResponse)
     .catch(handleError);
-
-  function findUser() {
-    return User.findOne().where({ email: email }).exec();
-  }
 
   function verifyPassword(key, user) {
     if (user && bufferEqual(key, user.password)) {
@@ -104,7 +101,7 @@ function destroy(req, res) {
     return User.updateUser(user, userParams);
   }
 
-  function sendResponse(user) {
+  function sendResponse() {
     res.json(200, 'Success');
   }
 
@@ -119,8 +116,14 @@ function show(req, res) {
     token = req.header('token');
 
   User.findByToken(token)
+    .then(verifyUser)
     .then(sendResponse)
     .catch(handleError);
+
+  function verifyUser(user) {
+    if (user) { return user; }
+    else { return Promise.reject('User not found. Please try again.'); }
+  }
 
   function sendResponse(user) {
     res.json(200, {
@@ -131,7 +134,23 @@ function show(req, res) {
   }
 
   function handleError(err) {
-    console.log(err);
+    res.json(500, err || 'There was a problem. Please try again.');
+  }
+}
+
+function validate(req, res) {
+  var
+    token = req.header('token');
+
+  User.findByToken(token)
+    .then(sendResponse)
+    .catch(handleError);
+
+  function sendResponse(user) {
+    res.json(200, !!user);
+  }
+
+  function handleError(err) {
     res.json(500, err || 'There was a problem. Please try again.');
   }
 }

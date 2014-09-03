@@ -3,7 +3,8 @@ module.exports = {
     src: [
       '<%= componentsPath %>/angular/angular.js',
       '<%= componentsPath %>/angular-ui-router/release/angular-ui-router.js',
-      '<%= componentsPath %>/satellizer/satellizer.js',
+      '<%= componentsPath %>/angular-cookies/angular-cookies.js',
+      '<%= componentsPath %>/ng-token-auth/dist/ng-token-auth.js',
       '<%= componentsPath %>/lodash/dist/lodash.js',
       '<%= componentsPath %>/chSnackbar/dist/chSnackbar.js',
       '<%= componentsPath %>/chValidator/dist/chValidator.js'

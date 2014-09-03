@@ -4,7 +4,7 @@
 
   dependencies = [
     'ui.router',
-    'satellizer'
+    'ng-token-auth'
   ];
 
   angular.module('nl.States', dependencies);

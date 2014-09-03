@@ -19,7 +19,7 @@
       self = {},
       userStore = {};
 
-    init();
+    //init();
 
     self.create = create;
     self.login = login;
@@ -33,17 +33,17 @@
 
     function init() {
       $http.get('/api/sessions', { headers: { token: $window.localStorage.nl_token }})
-        .then(setUserFromResponse);
+        .then(setUser);
     }
 
     function create(userParams) {
       return $auth.signup(userParams)
-        .then(setUserFromResponse);
+        .then(setUser);
     }
 
     function login(credentials) {
-      return $auth.login(credentials)
-        .then(setUserFromResponse);
+      return $auth.submitLogin(credentials)
+        .then(setUser);
     }
 
     function logout() {
@@ -60,8 +60,8 @@
       userStore[prop] = val;
     }
 
-    function setUserFromResponse(res) {
-      _.extend(userStore, res.data);
+    function setUser(userData) {
+      _.extend(userStore, userData);
     }
 
     function clear() {

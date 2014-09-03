@@ -4,7 +4,7 @@
     dependencies;
 
   dependencies = [
-    'satellizer',
+    'ng-token-auth',
     'nl.Vendor.LoDash'
   ];
 

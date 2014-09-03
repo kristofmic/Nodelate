@@ -17,19 +17,26 @@
   ];
 
   angular.module('nl.States')
-    .config(definition)
-    .run(runDefinition);
+    .config(definition);
+    //.run(runDefinition);
 
   function statesConfig($stateProvider, $urlRouterProvider) {
     $urlRouterProvider
-      .rule(authenticatedRedirect)
+      //.rule(authenticatedRedirect)
       .otherwise('/home');
 
     $stateProvider
       .state('main', {
         abstract: true,
         templateUrl: 'main.html',
-        controller: 'mainController'
+        controller: 'mainController',
+        resolve: {
+          isAuthenticated: ['$auth', function($auth) {
+            return $auth.validateUser()
+              .then(function() { return true; })
+              .catch(function() { return false; });
+          }]
+        }
       })
 
       .state('main.public', {
