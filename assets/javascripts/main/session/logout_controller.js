@@ -6,16 +6,19 @@
   definitions = [
     '$scope',
     '$state',
+    '$auth',
+    '$http',
+    'user',
     'snackbar',
-    'auth',
     logoutController
   ];
 
   angular.module('nl.Session')
     .controller('logoutController', definitions);
 
-  function logoutController($scope, $state, snackbar, auth) {
-    auth.logout();
+  function logoutController($scope, $state, $auth, $http, user, snackbar) {
+    $http.delete('/api/sessions', { headers: { token: user.get('token') }});
+    $auth.logout();
     snackbar.success('Successfully logged out');
     $state.go('main.public.login', null, { location: 'replace' });
   }

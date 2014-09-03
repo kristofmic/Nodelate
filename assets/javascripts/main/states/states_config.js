@@ -12,7 +12,7 @@
   runDefinition = [
     '$rootScope',
     '$state',
-    'auth',
+    '$auth',
     unAuthenticatedRedirect
   ];
 
@@ -83,11 +83,11 @@
       });
   }
 
-  function unAuthenticatedRedirect($rootScope, $state, auth) {
+  function unAuthenticatedRedirect($rootScope, $state, $auth) {
     $rootScope.$on('$stateChangeStart', authorizeState);
 
     function authorizeState(e, toState) {
-      if (toState.data.auth && !auth.isAuthenticated()) {
+      if (toState.data.auth && !$auth.isAuthenticated()) {
         e.preventDefault();
 
       }
@@ -97,11 +97,11 @@
   function authenticatedRedirect($injector, $location) {
     var
       path = $location.path(),
-      auth = $injector.get('auth'),
+      $auth = $injector.get('$auth'),
       login = '/login',
       signup = '/signup';
 
-    if (auth.isAuthenticated() && redirectPath()) {
+    if ($auth.isAuthenticated() && redirectPath()) {
       $location.path('/home').replace();
     }
 

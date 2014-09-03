@@ -24,15 +24,14 @@
       if ($scope.signupForm.$valid) {
         user.create({
           email: $scope.email,
-          password: $scope.password,
-          passwordConfirmation: $scope.passwordConfirmation
+          password: $scope.password
         })
-        .then(nextState)
+        .then(handleSuccess)
         ['catch'](handleError);
       }
 
-      function nextState() {
-        $state.go('main.private.dashboard');
+      function handleSuccess() {
+        snackbar.success('Your account has been successfully created! Please login.');
       }
 
       function handleError(err) {

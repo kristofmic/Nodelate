@@ -2,7 +2,7 @@ angular.module('nl.Templates', []).run(['$templateCache', function($templateCach
   'use strict';
 
   $templateCache.put('dash_header.html',
-    "<nav class=\"navbar navbar-inverse navbar-static-top\" role=\"navigation\"><div class=\"container\"><div class=\"navbar-header\"><button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#nav-links\"><span class=\"sr-only\">Toggle navigation</span> <span class=\"icon-bar\"></span> <span class=\"icon-bar\"></span> <span class=\"icon-bar\"></span></button> <a class=\"navbar-brand\" href=\"/\">Nodelate App</a></div><div class=\"collapse navbar-collapse\" id=\"nav-links\"><ul class=\"nav navbar-nav navbar-right\"><li><a ui-sref=\"main.private.dashboard\">Dashboard</a></li><li><a ui-sref=\"main.private.logout\">Log Out</a></li></ul></div></div></nav>"
+    "<nav class=\"navbar navbar-inverse navbar-static-top\" role=\"navigation\"><div class=\"container\"><div class=\"navbar-header\"><button type=\"button\" class=\"navbar-toggle\" data-toggle=\"collapse\" data-target=\"#nav-links\"><span class=\"sr-only\">Toggle navigation</span> <span class=\"icon-bar\"></span> <span class=\"icon-bar\"></span> <span class=\"icon-bar\"></span></button> <a class=\"navbar-brand\" href=\"/\">Nodelate App</a></div><div class=\"collapse navbar-collapse\" id=\"nav-links\"><p class=\"navbar-text navbar-right\">Signed in as {{user.get('email')}}</p><ul class=\"nav navbar-nav navbar-right\"><li><a ui-sref=\"main.private.dashboard\">Dashboard</a></li><li><a ui-sref=\"main.private.logout\">Log Out</a></li></ul></div></div></nav>"
   );
 
 

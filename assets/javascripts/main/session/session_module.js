@@ -5,9 +5,10 @@
 
   dependencies = [
     'ui.router',
+    'satellizer',
     'ch.Validator',
     'ch.Snackbar',
-    'nl.Auth'
+    'nl.User'
   ];
 
   angular.module('nl.Session', dependencies);

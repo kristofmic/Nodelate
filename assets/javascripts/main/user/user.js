@@ -5,45 +5,36 @@
 
   definitions = [
     '$http',
-    'auth',
+    '$auth',
+    '_',
     userFactory
   ];
 
   angular.module('nl.User')
     .factory('user', definitions);
 
-  function userFactory($http, auth) {
+  function userFactory($http, $auth, _) {
     var
       self = {},
-      userStore;
+      userStore = {};
 
     self.create = create;
+    self.get = get;
 
     return self;
 
     function create(userParams) {
-      var
-        newUser;
-
-      newUser = {
-        email: userParams.email,
-        password: userParams.password,
-        passwordConfirmation: userParams.passwordConfirmation
-      };
-
-      return $http.post('/api/users', newUser)
-        .then(setToken)
+      return $auth.signup(userParams)
         .then(setUser);
 
-      function setToken(res) {
-        auth.setSession(res.data.token);
-        return res;
-      }
-
       function setUser(res) {
-        userStore = res;
+        _.extend(userStore, res.data);
         return self;
       }
+    }
+
+    function get(prop) {
+      return userStore[prop];
     }
   }
 

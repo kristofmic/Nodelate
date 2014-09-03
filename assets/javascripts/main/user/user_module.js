@@ -4,7 +4,8 @@
     dependencies;
 
   dependencies = [
-    'nl.Auth'
+    'satellizer',
+    'nl.Vendor.LoDash'
   ];
 
   angular.module('nl.User', dependencies);
