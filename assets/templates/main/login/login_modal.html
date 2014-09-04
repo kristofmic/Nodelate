@@ -1,0 +1,25 @@
+<div class="modal-header">
+  <h4 class="modal-title">Please re-login</h4>
+</div>
+<div class="modal-body">
+  <form name="loginForm" class="form-horizontal" ng-submit="submit(loginForm, email, password)" novalidate>
+    <div class="form-group">
+      <label for="email" class="control-label sr-only">Email Address</label>
+      <div class="col-sm-10 col-sm-offset-1">
+        <input type="email" id="email" name="email" class="form-control" placeholder="Email address" ng-model="email" ch-validator="required email" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="password" class="control-label sr-only">Password</label>
+      <div class="col-sm-10 col-sm-offset-1">
+       <input type="password" id="password" name="password" class="form-control" placeholder='Password' ng-model='password' ch-validator="required password"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-10 col-sm-offset-1">
+        <button type="submit" class="btn btn-success">Login</button>
+        <button type="button" class="btn btn-default">Cancel</button>
+      </div>
+    </div>
+  </form>
+</div>

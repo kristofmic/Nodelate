@@ -5,8 +5,11 @@
 
   definitions = [
     '$window',
+    '$rootScope',
     '$http',
     '$auth',
+    'authService',
+    '$modal',
     '_',
     userFactory
   ];
@@ -14,13 +17,22 @@
   angular.module('nl.User')
     .factory('user', definitions);
 
-  function userFactory($window, $http, $auth, _) {
+  function userFactory($window, $rootScope, $http, $auth, authService, $modal, _) {
     var
       self = {},
       userStore = {};
 
-    init();
+    $rootScope.$on('event:auth-loginRequired', function(e, res) {
+      $modal
+        .open({
+          templateUrl: 'login_modal.html',
+          backdrop: 'static',
+          keyboard: false,
+          controller: 'loginController'
+        });
+    });
 
+    self.init = init;
     self.create = create;
     self.login = login;
     self.logout = logout;
@@ -32,18 +44,30 @@
     return self;
 
     function init() {
-      $http.get('/api/sessions', { headers: { token: $window.localStorage.nl_token }})
-        .then(setUserFromResponse);
+      var
+        token = $window.localStorage.nl_token;
+
+      if (token) {
+        return $http.get('/api/sessions', { headers: { token: $window.localStorage.nl_token }})
+          .then(setUserFromResponse);
+      }
+      else {
+        return self;
+      }
     }
 
     function create(userParams) {
-      return $auth.signup(userParams)
-        .then(setUserFromResponse);
+      return $auth.signup(userParams);
     }
 
     function login(credentials) {
       return $auth.login(credentials)
-        .then(setUserFromResponse);
+        .then(setUserFromResponse)
+        .then(confirmLogin);
+
+      function confirmLogin() {
+        authService.loginConfirmed();
+      }
     }
 
     function logout() {
@@ -62,6 +86,7 @@
 
     function setUserFromResponse(res) {
       _.extend(userStore, res.data);
+      return self;
     }
 
     function clear() {

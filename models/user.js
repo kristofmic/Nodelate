@@ -48,7 +48,7 @@ function findByToken(token) {
   }
 
   function defer(resolve, reject) {
-    User.findOne().where({ token: token }).exec(function(err, user) {
+    User.findOne().where({ token: token, tokenExpiration: { $gte: new Date() } }).exec(function(err, user) {
       if (!err) { resolve(user); }
       else { reject(err); }
     });

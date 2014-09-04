@@ -19,7 +19,6 @@ function create(req, res) {
   User.findByEmail(email)
     .then(verifyEmailUnique)
     .then(createPasswordHash)
-    .then(createToken)
     .then(createUser)
     .then(sendResponse)
     .catch(handleError);
@@ -34,21 +33,8 @@ function create(req, res) {
     return pbkdf2(password, process.env.SALT, 3, 20);
   }
 
-  function createToken(key) {
+  function createUser(key) {
     var
-      hash = crypto.createHash('sha1');
-
-    hash.update(email + key + Date.now());
-
-    return {
-      token: hash.digest('hex'),
-      password: key
-    };
-  }
-
-  function createUser(keys) {
-    var
-      expirationDate = new Date(),
       newUser,
       deferredPromise = new Promise(defer);
 
@@ -57,9 +43,7 @@ function create(req, res) {
     function defer(resolve, reject) {
       newUser = new User({
         email: email,
-        password: keys.password,
-        token: keys.token,
-        tokenExpiration: expirationDate.setDate(expirationDate.getDate() + 10),
+        password: key,
         isActive: true
       });
 
@@ -70,12 +54,8 @@ function create(req, res) {
     }
   }
 
-  function sendResponse(user) {
-    res.json(200, {
-      email: user.email,
-      token: user.token,
-      isActive: user.isActive
-    });
+  function sendResponse() {
+    res.json(200, 'Success');
   }
 
   function handleError(err) {
@@ -88,7 +68,16 @@ function show(req, res) {
     email = req.body.email;
 
   return User.findByEmail(email)
+    .then(sendResponse)
     .catch(handleError);
+
+  function sendResponse(user) {
+    res.json(200, {
+      email: user.email,
+      token: user.token,
+      isActive: user.isActive
+    });
+  }
 
   function handleError(err) {
     res.json(500, err || 'There was a problem. Please try again.');

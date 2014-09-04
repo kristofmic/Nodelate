@@ -5,6 +5,8 @@
 
   dependencies = [
     'satellizer',
+    'http-auth-interceptor',
+    'ui.bootstrap',
     'nl.Vendor.LoDash'
   ];
 

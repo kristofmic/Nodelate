@@ -29,7 +29,12 @@
       .state('main', {
         abstract: true,
         templateUrl: 'main.html',
-        controller: 'mainController'
+        controller: 'mainController',
+        resolve: {
+          userInit: ['user', function(user) {
+            return user.init();
+          }]
+        }
       })
 
       .state('main.public', {

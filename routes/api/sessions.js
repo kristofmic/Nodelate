@@ -64,7 +64,7 @@ function create(req, res) {
 
     userParams = {
       token: userData.token,
-      tokenExpiration: expirationDate.setDate(expirationDate.getDate() + 10)
+      tokenExpiration: expirationDate.setDate(expirationDate.getDate())
     };
 
     return User.updateUser(user, userParams);
@@ -123,15 +123,17 @@ function show(req, res) {
     .catch(handleError);
 
   function sendResponse(user) {
-    res.json(200, {
-      email: user.email,
-      token: user.token,
-      isActive: user.isActive
-    });
+    if (!user) { res.json(401, 'Token not found or expired.'); }
+    else {
+      res.json(200, {
+        email: user.email,
+        token: user.token,
+        isActive: user.isActive
+      });
+    }
   }
 
   function handleError(err) {
-    console.log(err);
     res.json(500, err || 'There was a problem. Please try again.');
   }
 }

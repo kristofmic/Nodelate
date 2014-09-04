@@ -1,7 +1,7 @@
 module.exports = {
   main: {
     src: [
-      '<%= htmlPath %>/main/**/*.html',
+      '<%= htmlPath %>/main/**/*.html'
     ],
     dest: '<%= jsPath %>/main/templates_module.js',
     options: {
