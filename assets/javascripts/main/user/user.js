@@ -49,7 +49,8 @@
     }
 
     function create(userParams) {
-      return $auth.signup(userParams);
+      return $auth.signup(userParams)
+        .then(setUserFromResponse);
     }
 
     function login(credentials) {
@@ -84,6 +85,15 @@
       $modal.open(modalConfig);
     }
 
+    function confirmLogin() {
+      authService.loginConfirmed(null, updateConfig);
+
+      function updateConfig(httpConfig) {
+        httpConfig.headers.token = getToken();
+        return httpConfig;
+      }
+    }
+
     function getProp(prop) {
       return userStore[prop];
     }
@@ -95,15 +105,6 @@
     function setUserFromResponse(res) {
       _.extend(userStore, res.data);
       return self;
-    }
-
-    function confirmLogin() {
-      authService.loginConfirmed(null, updateConfig);
-
-      function updateConfig(httpConfig) {
-        httpConfig.headers.token = getToken();
-        return httpConfig;
-      }
     }
 
     function clear() {

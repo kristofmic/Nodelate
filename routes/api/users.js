@@ -18,7 +18,7 @@ function create(req, res) {
   User.findBy({ email: email })
     .then(verifyEmailUnique)
     .then(createUser)
-    .then(responder.handleResponse(res, null, 'Success'))
+    .then(responder.handleResponse(res, null, ['email']))
     .catch(responder.handleError(res));
 
   function verifyEmailUnique(user) {
