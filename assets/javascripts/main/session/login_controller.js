@@ -17,7 +17,6 @@
 
   function loginController($scope, $state, user, snackbar, VALIDATION_EVENT) {
     $scope.submit = submit;
-    $scope.email = user.props.get('email');
 
     function submit() {
       $scope.$broadcast(VALIDATION_EVENT.VALIDATE);
