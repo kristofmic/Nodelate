@@ -3,7 +3,8 @@ var
   bufferEqual = require('buffer-equal'),
   Promise = require('bluebird'),
   User = require('../../models/user'),
-  pbkdf2 = Promise.promisify(crypto.pbkdf2);
+  pbkdf2 = Promise.promisify(crypto.pbkdf2),
+  tokenExpiration = 7;
 
 module.exports = {
   create: create,
@@ -64,7 +65,7 @@ function create(req, res) {
 
     userParams = {
       token: userData.token,
-      tokenExpiration: expirationDate.setDate(expirationDate.getDate())
+      tokenExpiration: expirationDate.setDate(expirationDate.getDate() + tokenExpiration)
     };
 
     return User.updateUser(user, userParams);
@@ -109,7 +110,6 @@ function destroy(req, res) {
   }
 
   function handleError(err) {
-    console.log(err);
     res.json(500, err || 'There was a problem. Please try again.');
   }
 }
@@ -118,7 +118,7 @@ function show(req, res) {
   var
     token = req.header('token');
 
-  User.findByToken(token)
+  User.findByTokenWithExpiration(token)
     .then(sendResponse)
     .catch(handleError);
 

@@ -19,6 +19,7 @@ User = mongoose.model('User', schema);
 
 User.findByEmail = findByEmail;
 User.findByToken = findByToken;
+User.findByTokenWithExpiration = findByTokenWithExpiration;
 User.updateUser = updateUser;
 
 module.exports = User;
@@ -40,6 +41,22 @@ function findByEmail(email) {
 }
 
 function findByToken(token) {
+  if (token) {
+    return new Promise(defer);
+  }
+  else {
+    return Promise.reject('No token provided.');
+  }
+
+  function defer(resolve, reject) {
+    User.findOne().where({ token: token }).exec(function(err, user) {
+      if (!err) { resolve(user); }
+      else { reject(err); }
+    });
+  }
+}
+
+function findByTokenWithExpiration(token) {
   if (token) {
     return new Promise(defer);
   }

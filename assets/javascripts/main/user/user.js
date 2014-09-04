@@ -22,15 +22,7 @@
       self = {},
       userStore = {};
 
-    $rootScope.$on('event:auth-loginRequired', function(e, res) {
-      $modal
-        .open({
-          templateUrl: 'login_modal.html',
-          backdrop: 'static',
-          keyboard: false,
-          controller: 'loginController'
-        });
-    });
+    $rootScope.$on('event:auth-loginRequired', verifyLogin);
 
     self.init = init;
     self.create = create;
@@ -45,7 +37,7 @@
 
     function init() {
       var
-        token = $window.localStorage.nl_token;
+        token = getToken();
 
       if (token) {
         return $http.get('/api/sessions', { headers: { token: $window.localStorage.nl_token }})
@@ -64,16 +56,32 @@
       return $auth.login(credentials)
         .then(setUserFromResponse)
         .then(confirmLogin);
-
-      function confirmLogin() {
-        authService.loginConfirmed();
-      }
     }
 
     function logout() {
-      $http.delete('/api/sessions', { headers: { token: getProp('token') }});
+      var
+        token = getToken();
+
+      if (token) {
+        $http.delete('/api/sessions', { headers: { token: token }});
+      }
+
       clear();
       $auth.logout();
+    }
+
+    function verifyLogin(e, res) {
+      var
+        modalConfig;
+
+      modalConfig = {
+        templateUrl: 'login_modal.html',
+        backdrop: 'static',
+        keyboard: false,
+        controller: 'loginModalController'
+      };
+
+      $modal.open(modalConfig);
     }
 
     function getProp(prop) {
@@ -89,8 +97,21 @@
       return self;
     }
 
+    function confirmLogin() {
+      authService.loginConfirmed(null, updateConfig);
+
+      function updateConfig(httpConfig) {
+        httpConfig.headers.token = getToken();
+        return httpConfig;
+      }
+    }
+
     function clear() {
       userStore = {};
+    }
+
+    function getToken() {
+      return $window.localStorage.nl_token;
     }
   }
 

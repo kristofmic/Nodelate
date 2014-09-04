@@ -1,5 +1,5 @@
 <div class="modal-header">
-  <h4 class="modal-title">Please re-login</h4>
+  <h4 class="modal-title">Please login again to verify your identity</h4>
 </div>
 <div class="modal-body">
   <form name="loginForm" class="form-horizontal" ng-submit="submit(loginForm, email, password)" novalidate>
@@ -18,7 +18,7 @@
     <div class="form-group">
       <div class="col-sm-10 col-sm-offset-1">
         <button type="submit" class="btn btn-success">Login</button>
-        <button type="button" class="btn btn-default">Cancel</button>
+        <button type="button" class="btn btn-default" ng-click="dismiss()">Cancel</button>
       </div>
     </div>
   </form>

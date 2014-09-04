@@ -9,23 +9,22 @@
     'user',
     'snackbar',
     'VALIDATION_EVENT',
-    '$modalInstance',
     loginController
   ];
 
   angular.module('nl.Session')
     .controller('loginController', definitions);
 
-  function loginController($scope, $state, user, snackbar, VALIDATION_EVENT, modal) {
+  function loginController($scope, $state, user, snackbar, VALIDATION_EVENT) {
     $scope.submit = submit;
 
-    function submit(loginForm, email, password) {
+    function submit() {
       $scope.$broadcast(VALIDATION_EVENT.VALIDATE);
 
-      if (loginForm.$valid) {
+      if ($scope.loginForm.$valid) {
         user.login({
-          email: email,
-          password: password
+          email: $scope.email,
+          password: $scope.password
         })
         ['catch'](handleError);
       }
