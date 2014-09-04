@@ -9,7 +9,7 @@ var
   mongoose = require('mongoose'),
 
   routes = require('./routes'),
-  errors = require('./errors'),
+  errors = require('./helpers/errors'),
 
   app = express();
 
