@@ -1,10 +1,9 @@
 var
-  crypto = require('crypto'),
-  bufferEqual = require('buffer-equal'),
   Promise = require('bluebird'),
+  uuid = require('node-uuid'),
   User = require('../../models/user'),
-  pbkdf2 = Promise.promisify(crypto.pbkdf2),
-  tokenExpiration = 7;
+  responder = require('../../helpers/responder'),
+  tokenActiveDuration = 7;
 
 module.exports = {
   create: create,
@@ -19,68 +18,36 @@ function create(req, res) {
 
   if (!email && !password) { res.json(400, 'Invalid email or password. Please try again.' ); }
 
-  Promise.join(
-      pbkdf2(password, process.env.SALT, 3, 20),
-      findUser(),
-      verifyPassword
-    )
+  User.findBy({ email: email })
+    .then(verifyUser)
+    .then(verifyPassword)
     .then(createToken)
-    .then(updateUser)
-    .then(sendResponse)
-    .catch(handleError);
+    .then(User.updateOne)
+    .then(responder.handleResponse(res, null, ['email', 'token', 'isActive']))
+    .catch(responder.handleError(res));
 
-  function findUser() {
-    return User.findOne().where({ email: email }).exec();
+  function verifyUser(user) {
+    return user ? user : Promise.reject('Invalid email or password. Please try again.');
   }
 
-  function verifyPassword(key, user) {
-    if (user && bufferEqual(key, user.password)) {
-      return {
-        user: user,
-        key: key
-      };
-    }
-    else {
-      return Promise.reject('Username or password is invalid. Please try again.');
+  function verifyPassword(user) {
+    return User.isValidPassword(password, user.password)
+      .then(resolveVerification);
+
+    function resolveVerification(isValid) {
+      return isValid ? user : Promise.reject('Invalid email or password. Please try again.');
     }
   }
 
-  function createToken(userData) {
+  function createToken(user) {
     var
-      hash = crypto.createHash('sha1');
+      token = uuid.v4(),
+      expiration = new Date();
 
-    hash.update(email + userData.key + Date.now());
+    user.token = token;
+    user.tokenExpiration = expiration.setDate(expiration.getDate() + tokenActiveDuration);
 
-    return {
-      token: hash.digest('hex'),
-      user: userData.user
-    };
-  }
-
-  function updateUser(userData) {
-    var
-      expirationDate = new Date(),
-      user = userData.user,
-      userParams;
-
-    userParams = {
-      token: userData.token,
-      tokenExpiration: expirationDate.setDate(expirationDate.getDate() + tokenExpiration)
-    };
-
-    return User.updateUser(user, userParams);
-  }
-
-  function sendResponse(user) {
-    res.json(200, {
-      email: user.email,
-      token: user.token,
-      isActive: user.isActive
-    });
-  }
-
-  function handleError(err) {
-    res.json(500, err || 'There was a problem. Please try again.');
+    return user;
   }
 }
 
@@ -88,10 +55,10 @@ function destroy(req, res) {
   var
     token = req.header('token');
 
-  User.findByToken(token)
+  User.findBy({ token: token })
     .then(destroyToken)
-    .then(sendResponse)
-    .catch(handleError);
+    .then(responder.handleResponse(res, null, 'Success'))
+    .catch(responder.handleError(res));
 
   function destroyToken(user) {
     var
@@ -102,15 +69,7 @@ function destroy(req, res) {
       tokenExpiration: null
     };
 
-    return User.updateUser(user, userParams);
-  }
-
-  function sendResponse(user) {
-    res.json(200, 'Success');
-  }
-
-  function handleError(err) {
-    res.json(500, err || 'There was a problem. Please try again.');
+    return User.updateOne(user, userParams);
   }
 }
 
@@ -118,22 +77,12 @@ function show(req, res) {
   var
     token = req.header('token');
 
-  User.findByTokenWithExpiration(token)
+  User.findBy({ token: token, tokenExpiration: { $gte: new Date() }})
     .then(sendResponse)
-    .catch(handleError);
+    .catch(responder.handleError(res));
 
   function sendResponse(user) {
     if (!user) { res.json(401, 'Token not found or expired.'); }
-    else {
-      res.json(200, {
-        email: user.email,
-        token: user.token,
-        isActive: user.isActive
-      });
-    }
-  }
-
-  function handleError(err) {
-    res.json(500, err || 'There was a problem. Please try again.');
+    else { responder.handleResponse(res, null, ['email', 'token', 'isActive'])(user); }
   }
 }

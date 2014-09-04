@@ -2,92 +2,110 @@ var
   mongoose = require('mongoose'),
   Promise = require('bluebird'),
   _ = require('lodash'),
+  bcrypt = require('bcrypt'),
+  handleDeferred = require('../helpers/responder').handleDeferred,
+  paramFilter = require('../helpers/param_filter'),
   schema,
+  schemaKeys,
   userSchema,
   User;
 
-userSchema = {
+schema = {
   email: { type: String, index: true, unique: true },
-  password: Buffer,
-  token: { type: String, unique: true, sparse: true },
+  password: String,
+  token: { type: String, sparse: true, unique: true },
   tokenExpiration: Date,
   isActive: Boolean
 };
+schemaKeys = _.keys(schema);
+userSchema = mongoose.Schema(schema);
+User = mongoose.model('User', userSchema);
 
-schema = mongoose.Schema(userSchema);
-User = mongoose.model('User', schema);
-
-User.findByEmail = findByEmail;
-User.findByToken = findByToken;
-User.findByTokenWithExpiration = findByTokenWithExpiration;
-User.updateUser = updateUser;
+User.findBy = findBy;
+User.updateOne = updateOne;
+User.createOne = createOne;
+User.hashPassword = hashPassword;
+User.isValidPassword = isValidPassword;
 
 module.exports = User;
 
-function findByEmail(email) {
-  if (email) {
-    return new Promise(defer);
-  }
-  else {
-    return Promise.reject('No email provided.');
-  }
+function findBy(params) {
+  var
+    deferredPromise = new Promise(defer);
+
+  params = paramFilter(schemaKeys, params);
+
+  return deferredPromise;
 
   function defer(resolve, reject) {
-    User.findOne().where({ email: email }).exec(function(err, user) {
-      if (!err) { resolve(user); }
-      else { reject(err); }
-    });
+    User.findOne()
+      .where(params)
+      .exec(handleDeferred(resolve, reject));
   }
 }
 
-function findByToken(token) {
-  if (token) {
-    return new Promise(defer);
-  }
-  else {
-    return Promise.reject('No token provided.');
-  }
+function updateOne(user, userParams) {
+  var
+    deferredPromise = new Promise(defer);
+
+  userParams = paramFilter(schemaKeys, userParams);
+
+  return deferredPromise;
 
   function defer(resolve, reject) {
-    User.findOne().where({ token: token }).exec(function(err, user) {
-      if (!err) { resolve(user); }
-      else { reject(err); }
-    });
+    _.extend(user, userParams);
+
+    user.save(handleDeferred(resolve, reject));
   }
 }
 
-function findByTokenWithExpiration(token) {
-  if (token) {
-    return new Promise(defer);
-  }
-  else {
-    return Promise.reject('No token provided.');
-  }
+function createOne(email, password) {
+  return hashPassword(password)
+    .then(createWithHash);
 
-  function defer(resolve, reject) {
-    User.findOne().where({ token: token, tokenExpiration: { $gte: new Date() } }).exec(function(err, user) {
-      if (!err) { resolve(user); }
-      else { reject(err); }
-    });
-  }
-}
-
-function updateUser(user, userParams) {
-  return new Promise(defer);
-
-  function defer(resolve, reject) {
+  function createWithHash(passwordHash) {
     var
-      permittedParams = _.keys(userSchema);
+      newUser,
+      deferredPromise = new Promise(defer);
 
-    _.each(permittedParams, function(param) {
-      if (userParams.hasOwnProperty(param)) {
-        user[param] = userParams[param];
-      }
-    });
+    return deferredPromise;
 
-    user.save(function(err, updatedUser) {
-      if (err) { reject(err); }
-      else { resolve(updatedUser); }
-    });
+    function defer(resolve, reject) {
+      newUser = new User({
+        email: email,
+        password: passwordHash,
+        isActive: true
+      });
+
+      newUser.save(handleDeferred(resolve, reject));
+    }
   }
 }
+
+function hashPassword(password) {
+  var
+    deferredPromise = new Promise(defer);
+
+  return deferredPromise;
+
+  function defer(resolve, reject) {
+    bcrypt.genSalt(4, genHash);
+
+    function genHash(err, salt) {
+      if (err) { reject(err); }
+      bcrypt.hash(password, salt, handleDeferred(resolve, reject));
+    }
+  }
+}
+
+function isValidPassword(password, hash) {
+  var
+    deferredPromise = new Promise(defer);
+
+  return deferredPromise;
+
+  function defer(resolve, reject) {
+    bcrypt.compare(password, hash, handleDeferred(resolve, reject));
+  }
+}
+

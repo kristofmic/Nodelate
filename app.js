@@ -1,5 +1,5 @@
 var
-  config = require('./config'),
+  env = require('./config/env'),
   express = require('express'),
   path = require('path'),
   favicon = require('static-favicon'),
