@@ -82,19 +82,25 @@ function forgotPassword(req, res) {
     email = req.body.email;
 
   User.findBy({ email: email })
+    .then(verifyUser)
     .then(token.createPasswordResetToken)
     .then(User.updateOne)
     .then(sendReset)
     .then(responder.handleResponse(res, null, 'A link to reset your password has been sent to your email.'))
     .catch(responder.handleError(res));
 
+  function verifyUser(user) {
+    console.log('verify user', user);
+    if (!user) { responder.handleResponse(res, null, 'A link to reset your password has been sent to your email.')(); }
+    else { return user; }
+  }
 
   function sendReset(user) {
     var
       mailerOptions;
 
     mailerOptions = {
-      from: 'Nodelate',
+      from: 'do-not-reply@grizzlyfeed.com',
       to: email,
       subject: 'Nodelate - Forgot Password',
       text: 'To reset your password, click the following link: http://localhost:3000/#/forgot_password/' + user.passwordResetToken
