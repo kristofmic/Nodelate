@@ -64,6 +64,11 @@
         templateUrl: 'signup.html',
         controller: 'signupController'
       })
+      .state('main.public.forgotPassword', {
+        url: '/forgot_password/:token',
+        templateUrl: 'forgot_password.html',
+        controller: 'forgotPasswordController'
+      })
 
       .state('main.private', {
         abstract: true,

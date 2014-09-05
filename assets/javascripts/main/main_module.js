@@ -4,6 +4,7 @@
     dependencies;
 
   dependencies = [
+    'ngTouch',
     'satellizer',
     'nl.Templates',
     'nl.States',

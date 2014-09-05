@@ -1,7 +1,7 @@
 var
   Promise = require('bluebird'),
   User = require('../../models/user'),
-  responder = require('../../helpers/responder');
+  responder = require('../../lib/responder');
 
 module.exports = {
   create: create,

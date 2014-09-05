@@ -4,12 +4,13 @@ var
   path = require('path'),
   favicon = require('static-favicon'),
   logger = require('morgan'),
+  debug = require('debug')('Nodelate'),
   cookieParser = require('cookie-parser'),
   bodyParser = require('body-parser'),
   mongoose = require('mongoose'),
 
-  routes = require('./routes'),
-  errors = require('./helpers/errors'),
+  controllers = require('./controllers'),
+  errors = require('./lib/errors'),
 
   app = express();
 
@@ -31,7 +32,11 @@ app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-routes(app);
+controllers(app);
 errors(app);
 
-module.exports = app;
+app.set('port', process.env.PORT || 3000);
+
+app.listen(app.get('port'), function() {
+  debug('Express server listening on port ' + app.get('port'));
+});

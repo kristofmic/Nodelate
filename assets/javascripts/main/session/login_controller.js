@@ -6,6 +6,7 @@
   definitions = [
     '$scope',
     '$state',
+    '$modal',
     'user',
     'snackbar',
     'VALIDATION_EVENT',
@@ -15,8 +16,9 @@
   angular.module('nl.Session')
     .controller('loginController', definitions);
 
-  function loginController($scope, $state, user, snackbar, VALIDATION_EVENT) {
+  function loginController($scope, $state, $modal, user, snackbar, VALIDATION_EVENT) {
     $scope.submit = submit;
+    $scope.forgotPassword = forgotPassword;
 
     function submit() {
       $scope.$broadcast(VALIDATION_EVENT.VALIDATE);
@@ -32,6 +34,20 @@
       function handleError(err) {
         snackbar.error(angular.fromJson(err.data));
       }
+    }
+
+    function forgotPassword() {
+      var
+        modalConfig;
+
+      modalConfig = {
+        templateUrl: 'forgot_password_modal.html',
+        backdrop: true,
+        keyboard: true,
+        controller: 'forgotPasswordModalController'
+      };
+
+      $modal.open(modalConfig);
     }
   }
 

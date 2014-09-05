@@ -1,14 +1,15 @@
 var
   Promise = require('bluebird'),
-  uuid = require('node-uuid'),
   User = require('../../models/user'),
-  responder = require('../../helpers/responder'),
-  tokenActiveDuration = 7;
+  responder = require('../../lib/responder'),
+  mailer = require('../../lib/mailer'),
+  token = require('../../lib/token');
 
 module.exports = {
   create: create,
   destroy: destroy,
-  show: show
+  show: show,
+  forgotPassword: forgotPassword
 };
 
 function create(req, res) {
@@ -21,7 +22,7 @@ function create(req, res) {
   User.findBy({ email: email })
     .then(verifyUser)
     .then(verifyPassword)
-    .then(createToken)
+    .then(token.createSessionToken)
     .then(User.updateOne)
     .then(responder.handleResponse(res, null, ['email', 'token', 'isActive']))
     .catch(responder.handleError(res));
@@ -37,17 +38,6 @@ function create(req, res) {
     function resolveVerification(isValid) {
       return isValid ? user : Promise.reject('Invalid email or password. Please try again.');
     }
-  }
-
-  function createToken(user) {
-    var
-      token = uuid.v4(),
-      expiration = new Date();
-
-    user.token = token;
-    user.tokenExpiration = expiration.setDate(expiration.getDate() + tokenActiveDuration);
-
-    return user;
   }
 }
 
@@ -84,5 +74,32 @@ function show(req, res) {
   function sendResponse(user) {
     if (!user) { res.json(401, 'Token not found or expired.'); }
     else { responder.handleResponse(res, null, ['email', 'token', 'isActive'])(user); }
+  }
+}
+
+function forgotPassword(req, res) {
+  var
+    email = req.body.email;
+
+  User.findBy({ email: email })
+    .then(token.createPasswordResetToken)
+    .then(User.updateOne)
+    .then(sendReset)
+    .then(responder.handleResponse(res, null, 'A link to reset your password has been sent to your email.'))
+    .catch(responder.handleError(res));
+
+
+  function sendReset(user) {
+    var
+      mailerOptions;
+
+    mailerOptions = {
+      from: 'Nodelate',
+      to: email,
+      subject: 'Nodelate - Forgot Password',
+      text: 'To reset your password, click the following link: http://localhost:3000/#/forgot_password/' + user.passwordResetToken
+    };
+
+    return mailer.send(mailerOptions);
   }
 }

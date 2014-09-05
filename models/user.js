@@ -3,8 +3,8 @@ var
   Promise = require('bluebird'),
   _ = require('lodash'),
   bcrypt = require('bcrypt'),
-  handleDeferred = require('../helpers/responder').handleDeferred,
-  paramFilter = require('../helpers/param_filter'),
+  handleDeferred = require('../lib/responder').handleDeferred,
+  paramFilter = require('../lib/param_filter'),
   schema,
   schemaKeys,
   userSchema,
@@ -15,7 +15,9 @@ schema = {
   password: String,
   token: { type: String, sparse: true, unique: true },
   tokenExpiration: Date,
-  isActive: Boolean
+  isActive: Boolean,
+  passwordResetToken: { type: String, sparse: true, unique: true },
+  passwordResetTokenExpiration: Date
 };
 schemaKeys = _.keys(schema);
 userSchema = mongoose.Schema(schema);
@@ -108,4 +110,6 @@ function isValidPassword(password, hash) {
     bcrypt.compare(password, hash, handleDeferred(resolve, reject));
   }
 }
+
+
 

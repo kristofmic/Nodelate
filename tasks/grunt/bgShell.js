@@ -1,5 +1,5 @@
 module.exports = {
   server: {
-    cmd: 'nodemon ./bin/www'
+    cmd: 'nodemon app'
   }
 };
