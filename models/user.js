@@ -26,6 +26,7 @@ User = mongoose.model('User', userSchema);
 User.findBy = findBy;
 User.updateOne = updateOne;
 User.createOne = createOne;
+User.updatePassword = updatePassword;
 User.hashPassword = hashPassword;
 User.isValidPassword = isValidPassword;
 
@@ -81,6 +82,17 @@ function createOne(email, password) {
 
       newUser.save(handleDeferred(resolve, reject));
     }
+  }
+}
+
+function updatePassword(user, password) {
+  return hashPassword(password)
+    .then(updateUser);
+
+  function updateUser(passwordHash) {
+    user.passwordResetToken = null;
+    user.passwordResetTokenExpiration = null;
+    return updateOne(user, { password: passwordHash });
   }
 }
 

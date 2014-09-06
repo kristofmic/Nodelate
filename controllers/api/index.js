@@ -5,6 +5,7 @@ var
   sessions = require('./sessions');
 
 router.post('/users', users.create);
+router.put('/users/reset_password', users.resetPassword);
 
 router.get('/sessions', sessions.show);
 router.post('/sessions/forgot_password', sessions.forgotPassword);

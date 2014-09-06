@@ -65,7 +65,7 @@
         controller: 'signupController'
       })
       .state('main.public.forgotPassword', {
-        url: '/forgot_password/:token',
+        url: '/forgot_password/:resetToken',
         templateUrl: 'forgot_password.html',
         controller: 'forgotPasswordController'
       })

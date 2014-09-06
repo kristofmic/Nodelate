@@ -24,7 +24,7 @@ function create(req, res) {
     .then(verifyPassword)
     .then(token.createSessionToken)
     .then(User.updateOne)
-    .then(responder.handleResponse(res, null, ['email', 'token', 'isActive']))
+    .then(responder.handleResponse(res, 201, ['email', 'token', 'isActive']))
     .catch(responder.handleError(res));
 
   function verifyUser(user) {
@@ -72,7 +72,7 @@ function show(req, res) {
     .catch(responder.handleError(res));
 
   function sendResponse(user) {
-    if (!user) { res.json(401, 'Token not found or expired.'); }
+    if (!user) { responder.handleError(res, 401, 'Token not found or expired.')(); }
     else { responder.handleResponse(res, null, ['email', 'token', 'isActive'])(user); }
   }
 }
@@ -103,6 +103,12 @@ function forgotPassword(req, res) {
       from: 'do-not-reply@grizzlyfeed.com',
       to: email,
       subject: 'Nodelate - Forgot Password',
+      html: '<p>To reset your password, click <a href="http://localhost:3000/#/forgot_password/' +
+            user.passwordResetToken +
+            '">this link</a></p>' +
+            '<br />' +
+            '<p>If clicking the link does not work, you may copy and paste it directly into the browser window: ' +
+            'http://localhost:3000/#/forgot_password/' + user.passwordResetToken + '</p>',
       text: 'To reset your password, click the following link: http://localhost:3000/#/forgot_password/' + user.passwordResetToken
     };
 

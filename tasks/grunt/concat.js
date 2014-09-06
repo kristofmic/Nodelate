@@ -21,10 +21,8 @@ module.exports = {
     },
     src: [
       '<%= jsPath %>/vendor/**/*.js',
-      '<%= jsPath %>/main/auth/auth_module.js',
-      '<%= jsPath %>/main/auth/*.js',
-      '<%= jsPath %>/main/user/user_module.js',
-      '<%= jsPath %>/main/user/*.js',
+      '<%= jsPath %>/shared/user/user_module.js',
+      '<%= jsPath %>/shared/user/*.js',
       '<%= jsPath %>/main/home/home_module.js',
       '<%= jsPath %>/main/home/*.js',
       '<%= jsPath %>/main/session/session_module.js',

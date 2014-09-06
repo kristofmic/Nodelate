@@ -26,8 +26,10 @@
 
     self.init = init;
     self.create = create;
+    self.update = update;
     self.login = login;
     self.logout = logout;
+    self.resetPassword = resetPassword;
     self.props = {
       get: getProp,
       set: setProp
@@ -40,7 +42,7 @@
         token = getToken();
 
       if (token) {
-        return $http.get('/api/sessions', { headers: { token: $window.localStorage.nl_token }})
+        return $http.get('/api/sessions', { headers: { token: token }})
           .then(setUserFromResponse);
       }
       else {
@@ -51,6 +53,19 @@
     function create(userParams) {
       return $auth.signup(userParams)
         .then(setUserFromResponse);
+    }
+
+    function update(userParams) {
+      var
+        token = getToken();
+
+      if (token) {
+        return $http.put('/api/users', userParams, { headers: { token: token}})
+          .then(setUserFromResponse);
+      }
+      else {
+        return self;
+      }
     }
 
     function login(credentials) {
@@ -69,6 +84,10 @@
 
       clear();
       $auth.logout();
+    }
+
+    function resetPassword(config) {
+      return $http.put('/api/users/reset_password', config);
     }
 
     function verifyLogin(e, res) {
@@ -103,7 +122,9 @@
     }
 
     function setUserFromResponse(res) {
-      _.extend(userStore, res.data);
+      if (res.data && angular.isObject(res.data)) {
+        _.extend(userStore, res.data);
+      }
       return self;
     }
 
