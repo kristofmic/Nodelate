@@ -31,7 +31,7 @@
       }
 
       function handleSuccess() {
-        snackbar.success('Your account has been successfully created! Please login.');
+        snackbar.success('An email has been sent to your address for verification. Please verify before logging in.');
       }
 
       function handleError(err) {

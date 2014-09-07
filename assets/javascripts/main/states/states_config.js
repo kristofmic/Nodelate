@@ -69,6 +69,10 @@
         templateUrl: 'forgot_password.html',
         controller: 'forgotPasswordController'
       })
+      .state('main.public.emailVerification', {
+        url: '/email_verification/:verificationToken',
+        controller: 'emailVerificationController'
+      })
 
       .state('main.private', {
         abstract: true,

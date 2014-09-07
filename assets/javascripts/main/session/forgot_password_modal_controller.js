@@ -28,7 +28,7 @@
       }
 
       function handleSuccess(res) {
-        snackbar.success(angular.fromJson(res.data));
+        snackbar.success('A link to reset your password has been sent to your email.');
       }
 
       function handleError(err) {

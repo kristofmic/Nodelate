@@ -5,6 +5,7 @@ var
   bcrypt = require('bcrypt'),
   handleDeferred = require('../lib/responder').handleDeferred,
   paramFilter = require('../lib/param_filter'),
+  token = require('../lib/token'),
   schema,
   schemaKeys,
   userSchema,
@@ -13,9 +14,11 @@ var
 schema = {
   email: { type: String, index: true, unique: true },
   password: String,
+  isActive: Boolean,
+  isVerified: Boolean,
   token: { type: String, sparse: true, unique: true },
   tokenExpiration: Date,
-  isActive: Boolean,
+  emailVerificationToken: { type: String, sparse: true, unique: true },
   passwordResetToken: { type: String, sparse: true, unique: true },
   passwordResetTokenExpiration: Date
 };
@@ -77,7 +80,9 @@ function createOne(email, password) {
       newUser = new User({
         email: email,
         password: passwordHash,
-        isActive: true
+        isActive: true,
+        isVerified: false,
+        emailVerificationToken: token.create().token
       });
 
       newUser.save(handleDeferred(resolve, reject));

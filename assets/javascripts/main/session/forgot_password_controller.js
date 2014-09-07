@@ -32,7 +32,7 @@
       }
 
       function handleSuccess(res) {
-        snackbar.success(angular.fromJson(res.data));
+        snackbar.success('Your password has been reset. You may now login.');
         $state.go('main.public.login', null, { location: 'replace' });
       }
 

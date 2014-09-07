@@ -19,12 +19,12 @@ function create(req, res) {
 
   if (!email && !password) { res.json(400, 'Invalid email or password. Please try again.' ); }
 
-  User.findBy({ email: email })
+  User.findBy({ email: email, isVerified: true, isActive: true })
     .then(verifyUser)
     .then(verifyPassword)
     .then(token.createSessionToken)
     .then(User.updateOne)
-    .then(responder.handleResponse(res, 201, ['email', 'token', 'isActive']))
+    .then(responder.handleResponse(res, 201, ['email', 'token', 'isActive', 'isVerified']))
     .catch(responder.handleError(res));
 
   function verifyUser(user) {
@@ -73,7 +73,7 @@ function show(req, res) {
 
   function sendResponse(user) {
     if (!user) { responder.handleError(res, 401, 'Token not found or expired.')(); }
-    else { responder.handleResponse(res, null, ['email', 'token', 'isActive'])(user); }
+    else { responder.handleResponse(res, null, ['email', 'token', 'isActive', 'isVerified'])(user); }
   }
 }
 
@@ -81,17 +81,16 @@ function forgotPassword(req, res) {
   var
     email = req.body.email;
 
-  User.findBy({ email: email })
+  User.findBy({ email: email, isVerified: true, isActive: true })
     .then(verifyUser)
     .then(token.createPasswordResetToken)
     .then(User.updateOne)
     .then(sendReset)
-    .then(responder.handleResponse(res, null, 'A link to reset your password has been sent to your email.'))
+    .then(responder.handleResponse(res, null, 'Success'))
     .catch(responder.handleError(res));
 
   function verifyUser(user) {
-    console.log('verify user', user);
-    if (!user) { responder.handleResponse(res, null, 'A link to reset your password has been sent to your email.')(); }
+    if (!user) { responder.handleResponse(res, null, 'Success')(); }
     else { return user; }
   }
 

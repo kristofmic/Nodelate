@@ -6,6 +6,7 @@ var
 
 router.post('/users', users.create);
 router.put('/users/reset_password', users.resetPassword);
+router.put('/users/verify_email', users.verifyEmail);
 
 router.get('/sessions', sessions.show);
 router.post('/sessions/forgot_password', sessions.forgotPassword);
