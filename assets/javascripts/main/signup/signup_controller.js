@@ -22,6 +22,8 @@
       $scope.$broadcast(VALIDATION_EVENT.VALIDATE);
 
       if ($scope.signupForm.$valid) {
+        snackbar.loading('Processing. Please wait.');
+
         user.create({
           email: $scope.email,
           password: $scope.password

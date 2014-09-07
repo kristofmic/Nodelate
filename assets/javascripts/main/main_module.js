@@ -1,7 +1,8 @@
 (function(angular) {
 
   var
-    dependencies;
+    dependencies,
+    authConfigDefinition;
 
   dependencies = [
     'ngTouch',
@@ -14,12 +15,17 @@
     'nl.Dashboard'
   ];
 
+  authConfigDefinition = [
+    '$authProvider',
+    configAuth
+  ];
+
   angular.module('nl.Main', dependencies)
-    .config(configAuth);
+    .config(authConfigDefinition);
 
   function configAuth($authProvider) {
     $authProvider.signupUrl = '/api/users';
-    $authProvider.signupRedirect = '/login';
+    $authProvider.signupRedirect = '/signup';
     $authProvider.loginOnSignup = false;
 
     $authProvider.loginUrl = '/api/sessions';

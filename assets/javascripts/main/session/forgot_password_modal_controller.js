@@ -21,6 +21,8 @@
 
     function submit(email) {
       if (email) {
+        snackbar.loading('Processing. Please wait.');
+
         $http.post('/api/sessions/forgot_password', { email: email })
           .then(handleSuccess)
           .then(modal.close)

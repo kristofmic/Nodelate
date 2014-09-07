@@ -23,6 +23,8 @@
       $scope.$broadcast(VALIDATION_EVENT.VALIDATE);
 
       if ($scope.forgotPasswordForm.$valid) {
+        snackbar.loading('Processing. Please wait.');
+
         user.resetPassword({
           resetToken: $stateParams.resetToken,
           password: $scope.password
