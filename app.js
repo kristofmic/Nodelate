@@ -4,7 +4,7 @@ var
   path = require('path'),
   favicon = require('static-favicon'),
   logger = require('morgan'),
-  debug = require('debug')('Nodelate'),
+  debug = require('debug')('GrizzlyFeed'),
   cookieParser = require('cookie-parser'),
   bodyParser = require('body-parser'),
   mongoose = require('mongoose'),
