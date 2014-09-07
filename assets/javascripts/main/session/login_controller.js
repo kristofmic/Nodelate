@@ -17,6 +17,7 @@
     .controller('loginController', definitions);
 
   function loginController($scope, $state, $modal, user, snackbar, VALIDATION_EVENT) {
+    $scope.credentials = {};
     $scope.submit = submit;
     $scope.forgotPassword = forgotPassword;
 
@@ -24,11 +25,8 @@
       $scope.$broadcast(VALIDATION_EVENT.VALIDATE);
 
       if ($scope.loginForm.$valid) {
-        user.login({
-          email: $scope.email,
-          password: $scope.password
-        })
-        ['catch'](handleError);
+        user.login($scope.credentials)
+          ['catch'](handleError);
       }
 
       function handleError(err) {

@@ -16,6 +16,7 @@
     .controller('signupController', definitions);
 
   function signupController($scope, $state, VALIDATION_EVENT, snackbar, user) {
+    $scope.credentials = {};
     $scope.submit = submit;
 
     function submit() {
@@ -24,10 +25,7 @@
       if ($scope.signupForm.$valid) {
         snackbar.loading('Processing. Please wait.');
 
-        user.create({
-          email: $scope.email,
-          password: $scope.password
-        })
+        user.create($scope.credentials)
         .then(handleSuccess)
         ['catch'](handleError);
       }

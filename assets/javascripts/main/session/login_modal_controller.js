@@ -17,6 +17,7 @@
     .controller('loginModalController', definitions);
 
   function loginModalController($scope, $state, user, snackbar, VALIDATION_EVENT, modal) {
+    $scope.credentials = {};
     $scope.submit = submit;
     $scope.dismiss = dismiss;
 
@@ -24,12 +25,9 @@
       $scope.$broadcast(VALIDATION_EVENT.VALIDATE);
 
       if (loginForm.$valid) {
-        user.login({
-          email: email,
-          password: password
-        })
-        .then(modal.close)
-        ['catch'](handleError);
+        user.login($scope.credentials)
+          .then(modal.close)
+          ['catch'](handleError);
       }
 
       function handleError(err) {
