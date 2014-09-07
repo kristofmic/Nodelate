@@ -22,7 +22,8 @@ function gruntConfig(grunt) {
     sass: tasks.sass,
     ngtemplates: tasks.ngtemplates,
     uglify: tasks.uglify,
-    bgShell: tasks.bgShell
+    bgShell: tasks.bgShell,
+    mochaTest: tasks.mochaTest
   });
 
   for (var task in pkg.devDependencies) {
@@ -41,6 +42,9 @@ function gruntConfig(grunt) {
     'build:dev',
     'uglify'
 
+  ]);
+  grunt.registerTask('test:dev:server', [
+    'mochaTest'
   ]);
   grunt.registerTask('server', ['bgShell:server']);
   grunt.registerTask('default', [
