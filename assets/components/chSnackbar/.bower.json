@@ -25,11 +25,11 @@
     "angular": "~1.2.23"
   },
   "homepage": "https://github.com/kristofmic/chSnackbar",
-  "_release": "0c67b4ad0c",
+  "_release": "b3c8053c81",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "0c67b4ad0c82ce22810e3e1424f7ff5091a5970f"
+    "commit": "b3c8053c81369b8fc0f0d037deb8c73521e2b144"
   },
   "_source": "git@github.com:kristofmic/chSnackbar.git",
   "_target": "*",
