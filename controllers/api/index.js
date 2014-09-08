@@ -5,6 +5,7 @@ var
   sessions = require('./sessions');
 
 router.post('/users', users.create);
+router.put('/users', users.update);
 router.put('/users/reset_password', users.resetPassword);
 router.put('/users/verify_email', users.verifyEmail);
 

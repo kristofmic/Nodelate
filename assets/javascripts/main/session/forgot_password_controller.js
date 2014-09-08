@@ -19,15 +19,15 @@
   function forgotPasswordController($scope, $state, $stateParams, user, snackbar, VALIDATION_EVENT) {
     $scope.submit = submit;
 
-    function submit() {
+    function submit(form, password) {
       $scope.$broadcast(VALIDATION_EVENT.VALIDATE);
 
-      if ($scope.forgotPasswordForm.$valid) {
+      if (form.$valid) {
         snackbar.loading('Processing. Please wait.');
 
         user.resetPassword({
           resetToken: $stateParams.resetToken,
-          password: $scope.password
+          password: password
         })
         .then(handleSuccess)
         ['catch'](handleError);

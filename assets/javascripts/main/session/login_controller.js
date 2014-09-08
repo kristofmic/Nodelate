@@ -21,11 +21,11 @@
     $scope.submit = submit;
     $scope.forgotPassword = forgotPassword;
 
-    function submit() {
+    function submit(form, fields) {
       $scope.$broadcast(VALIDATION_EVENT.VALIDATE);
 
-      if ($scope.loginForm.$valid) {
-        user.login($scope.credentials)
+      if (form.$valid) {
+        user.login(fields)
           ['catch'](handleError);
       }
 

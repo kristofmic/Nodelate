@@ -22,7 +22,7 @@ schema = {
   passwordResetToken: { type: String, sparse: true, unique: true },
   passwordResetTokenExpiration: Date
 };
-schemaKeys = _.keys(schema);
+schemaKeys = _.keys(schema).concat('createdAt');
 userSchema = mongoose.Schema(schema);
 User = mongoose.model('User', userSchema);
 
@@ -36,17 +36,27 @@ User.isValidPassword = isValidPassword;
 module.exports = User;
 
 function findBy(params) {
-  var
-    deferredPromise = new Promise(defer);
+  return findByPromise(params)
+    .then(appendCreatedAt);
 
-  params = paramFilter(schemaKeys, params);
+  function findByPromise(params) {
+    var
+      deferredPromise = new Promise(defer);
 
-  return deferredPromise;
+    params = paramFilter(schemaKeys, params);
 
-  function defer(resolve, reject) {
-    User.findOne()
-      .where(params)
-      .exec(handleDeferred(resolve, reject));
+    return deferredPromise;
+
+    function defer(resolve, reject) {
+      User.findOne()
+        .where(params)
+        .exec(handleDeferred(resolve, reject));
+    }
+  }
+
+  function appendCreatedAt(user) {
+    if (user) { user.createdAt = user._id.getTimestamp(); }
+    return user;
   }
 }
 
@@ -127,6 +137,5 @@ function isValidPassword(password, hash) {
     bcrypt.compare(password, hash, handleDeferred(resolve, reject));
   }
 }
-
 
 

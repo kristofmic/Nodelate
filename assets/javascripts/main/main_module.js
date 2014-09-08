@@ -12,7 +12,8 @@
     'nl.Home',
     'nl.Session',
     'nl.Signup',
-    'nl.Dashboard'
+    'nl.Feeds',
+    'nl.Account'
   ];
 
   authConfigDefinition = [
@@ -29,7 +30,7 @@
     $authProvider.loginOnSignup = false;
 
     $authProvider.loginUrl = '/api/sessions';
-    $authProvider.loginRedirect = '/dashboard';
+    $authProvider.loginRedirect = '/feeds';
 
     $authProvider.logoutRedirect = null;
 

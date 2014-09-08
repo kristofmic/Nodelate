@@ -7,6 +7,6 @@
 
   ];
 
-  angular.module('nl.Dashboard', dependencies);
+  angular.module('nl.Feeds', dependencies);
 
 })(angular);

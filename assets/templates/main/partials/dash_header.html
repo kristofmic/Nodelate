@@ -1,5 +1,5 @@
 
-<nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="container">
 
     <div class="navbar-header">
@@ -15,13 +15,27 @@
     <div class="collapse navbar-collapse" id="nav-links">
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <p class="navbar-text">Signed in as {{user.get('email')}}</p>
+          <a ui-sref="main.private.feeds">
+            <i class="fa fa-newspaper-o fa-lg"></i>
+          </a>
         </li>
         <li>
-          <a ui-sref="main.private.dashboard">Dashboard</a>
+          <a ui-sref="main.private.add">
+            <i class="fa fa-search-plus fa-lg"></i>
+          </a>
         </li>
         <li>
-          <a ui-sref="main.private.logout">Log Out</a>
+          <a ui-sref="main.private.account">
+            <i class="fa fa-user fa-lg"></i>
+          </a>
+        </li>
+        <li>
+          <a ui-sref="main.private.logout">
+            <i class="fa fa-sign-out fa-lg"></i>
+          </a>
+        </li>
+        <li>
+          <p class="navbar-text">{{user.get('email')}}</p>
         </li>
       </ul>
     </div>

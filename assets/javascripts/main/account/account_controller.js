@@ -5,17 +5,17 @@
 
   definitions = [
     '$scope',
-    '$state',
+    'user',
     'VALIDATION_EVENT',
     'snackbar',
-    'user',
-    signupController
+    accountController
   ];
 
-  angular.module('nl.Signup')
-    .controller('signupController', definitions);
+  angular.module('nl.Account')
+    .controller('accountController', definitions);
 
-  function signupController($scope, $state, VALIDATION_EVENT, snackbar, user) {
+  function accountController($scope, user, VALIDATION_EVENT, snackbar) {
+    $scope.user = user.props;
     $scope.credentials = {};
     $scope.submit = submit;
 
@@ -25,13 +25,16 @@
       if (form.$valid) {
         snackbar.loading('Processing. Please wait.');
 
-        user.create(fields)
-        .then(handleSuccess)
-        ['catch'](handleError);
+        user.update(fields)
+          .then(handleSuccess)
+          ['catch'](handleError);
       }
 
       function handleSuccess() {
-        snackbar.success('An email has been sent to your address for verification. Please verify before logging in.');
+        snackbar.success('Password successfully updated.');
+        $scope.changePassword = false;
+        $scope.credentials = {};
+        $scope.newPasswordConfirmation = '';
       }
 
       function handleError(err) {

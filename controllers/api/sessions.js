@@ -3,7 +3,7 @@ var
   User = require('../../models/user'),
   responder = require('../../lib/responder'),
   mailer = require('../../lib/mailer'),
-  token = require('../../lib/token');
+  tokens = require('../../lib/token');
 
 module.exports = {
   create: create,
@@ -22,7 +22,7 @@ function create(req, res) {
   User.findBy({ email: email, isVerified: true, isActive: true })
     .then(verifyUser)
     .then(verifyPassword)
-    .then(token.createSessionToken)
+    .then(tokens.createSessionToken)
     .then(User.updateOne)
     .then(responder.handleResponse(res, 201, ['email', 'token', 'isActive', 'isVerified']))
     .catch(responder.handleError(res));
@@ -73,7 +73,7 @@ function show(req, res) {
 
   function sendResponse(user) {
     if (!user) { responder.handleError(res, 401, 'Token not found or expired.')(); }
-    else { responder.handleResponse(res, null, ['email', 'token', 'isActive', 'isVerified'])(user); }
+    else { responder.handleResponse(res, null, ['email', 'token', 'isActive', 'isVerified', 'createdAt'])(user); }
   }
 }
 
@@ -83,7 +83,7 @@ function forgotPassword(req, res) {
 
   User.findBy({ email: email, isVerified: true, isActive: true })
     .then(verifyUser)
-    .then(token.createPasswordResetToken)
+    .then(tokens.createPasswordResetToken)
     .then(User.updateOne)
     .then(sendReset)
     .then(responder.handleResponse(res, null, 'Success'))
@@ -99,9 +99,9 @@ function forgotPassword(req, res) {
       mailerOptions;
 
     mailerOptions = {
-      from: 'do-not-reply@grizzlyfeed.com',
+      from: 'Grizzly Feed <do-not-reply@grizzlyfeed.com>',
       to: email,
-      subject: 'Nodelate - Forgot Password',
+      subject: 'Grizzly Feed - Forgot Password',
       html: '<p>To reset your password, click <a href="http://localhost:3000/#/forgot_password/' +
             user.passwordResetToken +
             '">this link</a></p>' +

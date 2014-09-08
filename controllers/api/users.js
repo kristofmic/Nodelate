@@ -1,11 +1,13 @@
 var
   Promise = require('bluebird'),
+  _ = require('lodash'),
   User = require('../../models/user'),
   responder = require('../../lib/responder'),
   mailer = require('../../lib/mailer');
 
 module.exports = {
   create: create,
+  update: update,
   resetPassword: resetPassword,
   verifyEmail: verifyEmail
 };
@@ -39,9 +41,9 @@ function create(req, res) {
       mailerOptions;
 
     mailerOptions = {
-      from: 'do-not-reply@grizzlyfeed.com',
+      from: 'Grizzly Feed <do-not-reply@grizzlyfeed.com>',
       to: email,
-      subject: 'Nodelate - Email Verification',
+      subject: 'Grizzly Feed - Email Verification',
       html: '<p>Click <a href="http://localhost:3000/#/email_verification/' +
             user.emailVerificationToken +
             '">this link</a> to verify your email.</p>' +
@@ -54,6 +56,49 @@ function create(req, res) {
     return mailer.send(mailerOptions);
   }
 
+}
+
+function update(req, res) {
+  var
+    token = req.header('token'),
+    password = req.body.password,
+    newPassword = req.body.newPassword,
+    updateParams = _.omit(req.body, ['token', 'tokenExpiration', 'isActive', 'isVerified', 'passwordResetToken', 'passwordResetTokenExpiration', 'password', 'newPassword']);
+
+  User.findBy({ token: token, tokenExpiration: { $gte: new Date() }})
+    .then(updateUser)
+    .then(responder.handleResponse(res, 201, ['email', 'token', 'isActive', 'isVerified']))
+    .catch(responder.handleError(res));
+
+  function updateUser(user) {
+    if (!user) { responder.handleError(res, 401, 'Token not found or expired.')(); }
+    else {
+      if (password && newPassword) {
+        return updatePassword(user, password, newPassword);
+      }
+      else {
+        return User.updateOne(user, updateParams);
+      }
+    }
+  }
+
+  function updatePassword(user, password, newPassword) {
+    return verifyPassword(user)
+      .then(updateUserPassword);
+
+    function verifyPassword(user) {
+      return User.isValidPassword(password, user.password)
+        .then(resolveVerification);
+
+      function resolveVerification(isValid) {
+        return isValid ? user : Promise.reject('Invalid password. Please try again.');
+      }
+    }
+
+    function updateUserPassword(user) {
+      return User.updatePassword(user, newPassword);
+    }
+  }
 }
 
 function verifyEmail(req, res) {
@@ -84,7 +129,6 @@ function resetPassword(req, res) {
 
   User.findBy({ passwordResetToken: resetToken, passwordResetTokenExpiration: { $gte: new Date() }})
     .then(updatePassword)
-    .then(User.updateOne)
     .then(responder.handleResponse(res, null, 'Success'))
     .catch(responder.handleError(res));
 
