@@ -108,7 +108,7 @@
     function authorizeState(e, toState) {
       if (toState.data.auth && !$auth.isAuthenticated()) {
         e.preventDefault();
-
+        $state.go('main.public.login', null, { location: 'replace' });
       }
     }
   }
