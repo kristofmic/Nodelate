@@ -55,7 +55,6 @@ function create(req, res) {
 
     return mailer.send(mailerOptions);
   }
-
 }
 
 function update(req, res) {

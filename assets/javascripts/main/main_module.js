@@ -12,7 +12,7 @@
     'nl.Home',
     'nl.Session',
     'nl.Signup',
-    'nl.Feeds',
+    'nl.Dashboard',
     'nl.Account'
   ];
 
@@ -30,7 +30,7 @@
     $authProvider.loginOnSignup = false;
 
     $authProvider.loginUrl = '/api/sessions';
-    $authProvider.loginRedirect = '/feeds';
+    $authProvider.loginRedirect = '/dashboard';
 
     $authProvider.logoutRedirect = null;
 

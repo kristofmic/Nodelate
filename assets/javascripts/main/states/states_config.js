@@ -90,10 +90,10 @@
         url: '/logout',
         controller: 'logoutController'
       })
-      .state('main.private.feeds', {
-        url: '/feeds',
-        templateUrl: 'feeds.html',
-        controller: 'feedsController'
+      .state('main.private.dashboard', {
+        url: '/dashboard',
+        templateUrl: 'dashboard.html',
+        controller: 'dashboardController'
       })
       .state('main.private.account', {
         url: '/account',
