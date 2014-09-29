@@ -54,12 +54,14 @@ function destroy(req, res) {
     var
       userParams;
 
-    userParams = {
-      token: null,
-      tokenExpiration: null
-    };
+    if (user) {
+      userParams = {
+        token: null,
+        tokenExpiration: null
+      };
 
-    return User.updateOne(user, userParams);
+      return User.updateOne(user, userParams);
+    }
   }
 }
 
