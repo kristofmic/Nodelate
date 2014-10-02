@@ -46,6 +46,9 @@ function gruntConfig(grunt) {
   grunt.registerTask('test:dev:server', [
     'mochaTest'
   ]);
+  grunt.registerTask('test:dist', [
+    'mochaTest'
+  ]);
   grunt.registerTask('server', ['bgShell:server']);
   grunt.registerTask('default', [
     'build:dist',
