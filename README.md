@@ -1,1 +1,3 @@
-# GrizzlyFeed v2.0
+# Nodelate
+
+## Base level app for creating Node-backed, Angular-fronted apps.
